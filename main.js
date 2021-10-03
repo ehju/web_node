@@ -1,5 +1,55 @@
-//function main() {
+const express = require('express');
+const app = express();
+const port = 3000;
+const fs = require('fs');
+const path = require('path');
+const sanitizeHtml = require('sanitize-html');
+var template = require('./lib/template.js');
 
+app.get('/', (req, res) => {
+  fs.readdir('./data', (error, flist) => {
+    var title = 'Welcome';
+    var context = 'Hello, Node.js';
+    var list = template.list(flist);
+    var html = template.html(
+      title,
+      list,
+      `<h2>${title}</h2><p>${context}</p>`,
+      `<button><a href="/create">new post</a></button>`
+    );
+    res.send(html);
+  });
+});
+
+app.get('/page/:pageId', (req, res) => {
+  fs.readdir('./data', (error, flist) => {
+    var filteredId = path.parse(req.params.pageId).base;
+    fs.readFile(`data/${filteredId}`, 'utf8', (err, context) => {
+      var list = template.list(flist);
+      var title = req.params.pageId;
+      var sanitizedTitle = sanitizeHtml(title);
+      var sanitizedContext = sanitizeHtml(context, { allowedTags: ['h1','h2','a'] });
+      var html = template.html(
+        title,
+        list,
+        `<h2>${sanitizedTitle}</h2> <p>${sanitizedContext}</p>`,
+        `<button><a href="/create">new post</a></button>
+                 <button><a href="/update?id=${title}">update</a></button>
+                 <form action="delete_process" method="post">
+                     <input type="hidden" name="id" value="${title}">
+                     <input type="submit" value="delete">
+                 </form>`
+      );
+      res.send(html);
+    });
+  });
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});
+
+/*
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
@@ -159,5 +209,4 @@ var app = http.createServer(function (request, response) {
 });
 app.listen(3000);
 //}
-
-//main();
+*/
