@@ -29,7 +29,7 @@ app.get('/page/:pageId', (req, res) => {
       var list = template.list(flist);
       var title = req.params.pageId;
       var sanitizedTitle = sanitizeHtml(title);
-      var sanitizedContext = sanitizeHtml(context, { allowedTags: ['h1', 'h2', 'a'] });
+      var sanitizedContext = sanitizeHtml(context, { allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5','h6', 'p', 'strong','em','br','li', 'ol', 'ul', 'span'] });
       var html = template.html(
         title,
         list,
@@ -56,11 +56,16 @@ app.get('/create', (req, res) => {
       `
     <form action="/create_process" method="post">
         <p><input type ="text" name="title"></p>
-        <p>
-            <textarea name="description"></textarea>        
-        </p>
+        <textarea id="editor" name="description" ></textarea>
         <p><input type="submit"> </p>
-    </form>`,
+    </form>
+    <script>
+        ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+    </script>`,
       `<button><a href="/create">new post</a></button>`
     );
     res.send(html);
@@ -103,11 +108,16 @@ app.get('/update/:pageId', (req, res) => {
             <form action="/update_process" method="post">
             <input type ="hidden" name="id" value=${title}>
             <p><input type ="text" name="title" value=${title}></p>
-            <p>
-                <textarea name="description" >${context}</textarea>        
-            </p>
+            <textarea id="editor" name="description" >${context}</textarea>        
             <p><input type="submit"> </p>
-        </form>`,
+        </form>
+        <script>
+        ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+    </script>`,
         `<button><a href="/create">new post</a></button>`
       );
       res.send(html);
