@@ -81,10 +81,9 @@ app.post('/create_process', (req, res) => {
     fs.writeFile(`data/${title}`, description, function (err) {
       if (err) {
         console.log(err);
-        res.writeHead(302, { Location: `/` });
+        res.redirect(`/`);
       } else {
-        res.writeHead(302, { Location: `/page/${title}` });
-        res.end();
+        res.redirect(`/page/${title}`);
       }
     });
   });
@@ -130,8 +129,7 @@ app.post('/update_process', (req, res) => {
     var description = post.description;
     fs.rename(`data/${id}`, `data/${title}`, function (error) {
       fs.writeFile(`data/${title}`, description, function (err) {
-        res.writeHead(302, { Location: `/page/${title}` });
-        res.end();
+        res.redirect(`/page/${title}`);
       });
     });
   });
@@ -147,8 +145,7 @@ app.post('/delete_process', (req, res) => {
     var id = post.id;
     var filteredId = path.parse(id).base;
     fs.unlink(`data/${filteredId}`, function (error) {
-      res.writeHead(302, { Location: `/` });
-      res.end('done');
+      res.redirect('/');
     });
   });
 });
