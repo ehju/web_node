@@ -5,7 +5,11 @@ const fs = require('fs');
 const qs = require('qs');
 const path = require('path');
 const sanitizeHtml = require('sanitize-html');
+const bodyParser = require('body-parser');
 var template = require('./lib/template.js');
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
   fs.readdir('./data', (error, flist) => {
@@ -29,7 +33,25 @@ app.get('/page/:pageId', (req, res) => {
       var list = template.list(flist);
       var title = req.params.pageId;
       var sanitizedTitle = sanitizeHtml(title);
-      var sanitizedContext = sanitizeHtml(context, { allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5','h6', 'p', 'strong','em','br','li', 'ol', 'ul', 'span'] });
+      var sanitizedContext = sanitizeHtml(context, {
+        allowedTags: [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6',
+          'p',
+          'strong',
+          'em',
+          'br',
+          'li',
+          'ol',
+          'ul',
+          'span',
+          'blockquote',
+        ],
+      });
       var html = template.html(
         title,
         list,
@@ -74,23 +96,16 @@ app.get('/create', (req, res) => {
 
 // create process
 app.post('/create_process', (req, res) => {
-  var body = '';
-  req.on('data', (data) => {
-    body = body + data;
-  });
-  req.on('end', () => {
-    //정보 수신 끝
-    var post = qs.parse(body);
-    var title = post.title;
-    var description = post.description;
-    fs.writeFile(`data/${title}`, description, function (err) {
-      if (err) {
-        console.log(err);
-        res.redirect(`/`);
-      } else {
-        res.redirect(`/page/${title}`);
-      }
-    });
+  var post = req.body;
+  var title = post.title;
+  var description = post.description;
+  fs.writeFile(`data/${title}`, description, function (err) {
+    if (err) {
+      console.log(err);
+      res.redirect(`/`);
+    } else {
+      res.redirect(`/page/${title}`);
+    }
   });
 });
 
@@ -127,36 +142,23 @@ app.get('/update/:pageId', (req, res) => {
 
 // create process
 app.post('/update_process', (req, res) => {
-  var body = '';
-  req.on('data', function (data) {
-    body = body + data;
-  });
-  req.on('end', function () {
-    //정보 수신 끝
-    var post = qs.parse(body);
-    var id = post.id;
-    var title = post.title;
-    var description = post.description;
-    fs.rename(`data/${id}`, `data/${title}`, function (error) {
-      fs.writeFile(`data/${title}`, description, function (err) {
-        res.redirect(`/page/${title}`);
-      });
+  var post = req.body;
+  var id = post.id;
+  var title = post.title;
+  var description = post.description;
+  fs.rename(`data/${id}`, `data/${title}`, function (error) {
+    fs.writeFile(`data/${title}`, description, function (err) {
+      res.redirect(`/page/${title}`);
     });
   });
 });
 
 app.post('/delete_process', (req, res) => {
-  var body = '';
-  req.on('data', function (data) {
-    body = body + data;
-  });
-  req.on('end', function () {
-    var post = qs.parse(body);
-    var id = post.id;
-    var filteredId = path.parse(id).base;
-    fs.unlink(`data/${filteredId}`, function (error) {
-      res.redirect('/');
-    });
+  var post = req.body;
+  var id = post.id;
+  var filteredId = path.parse(id).base;
+  fs.unlink(`data/${filteredId}`, function (error) {
+    res.redirect('/');
   });
 });
 app.listen(port, () => {
