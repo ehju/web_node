@@ -6,10 +6,13 @@ const qs = require('qs');
 const path = require('path');
 const sanitizeHtml = require('sanitize-html');
 const bodyParser = require('body-parser');
+const compression = require('compression');
 var template = require('./lib/template.js');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(compression());
 
 app.get('/', (req, res) => {
   fs.readdir('./data', (error, flist) => {
