@@ -1,0 +1,28 @@
+
+header {
+  text-align: center;
+}
+
+nav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  overflow: hidden;
+}
+.mycontrol {
+  background-color: yellowgreen;
+}
+.container {
+  margin-left : 160px;
+  height: 100%;
+}
+.blog {
+  padding-left: 10px;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+.btn-style {
+  border: none;
+}

@@ -63,7 +63,7 @@ app.get('/page/:pageId', (req, res) => {
         `<h2>${sanitizedTitle}</h2> <p>${sanitizedContext}</p>`,
         `<button><a href="/create">new post</a></button>
                  <button><a href="/update/${title}">update</a></button>
-                 <form action="/delete_process" method="post">
+                 <form action="/delete_process" method="post" style="display:inline;">
                      <input type="hidden" name="id" value="${title}">
                      <input type="submit" value="delete">
                  </form>`
