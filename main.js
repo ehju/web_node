@@ -9,7 +9,9 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 var template = require('./lib/template.js');
 
-// parse application/x-www-form-urlencoded
+
+app.use(express.static('public'));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(compression());
@@ -22,7 +24,7 @@ app.get('/', (req, res) => {
     var html = template.html(
       title,
       list,
-      `<h2>${title}</h2><p>${context}</p>`,
+      `<h2>${title}</h2><p>${context}</p><img src="/images/coding.jpg" style="width:500px; margin:10px">`,
       `<button><a href="/create">new post</a></button>`
     );
     res.send(html);
