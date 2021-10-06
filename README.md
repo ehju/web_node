@@ -1,11 +1,11 @@
 # Web - node.js / express / database
 
   
-**생활코딩**  https://www.opentutorials.org/  의 node.js 강의를 들으며 연습하는 page.
+**생활코딩**  https://www.opentutorials.org/  의 node.js 강의를 바탕으로 진행.
 
 
 
-**goormIDE** [https://ide.goorm.io] 개발 환경 사용
+**goormIDE** [https://ide.goorm.io] 개발 환경 사용.
 
 
 
@@ -15,6 +15,5 @@ project link : **https://nodenew-urgxs.run.goorm.io/** ( alive only when develop
 
 ##### timeline
 
-- ~2021.10.02 node.js 
-- express
-- 
+- 2021.10.02 node.js CRUD
+- 2021.10.07 express 도입
