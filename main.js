@@ -7,8 +7,8 @@ const path = require('path');
 const sanitizeHtml = require('sanitize-html');
 const bodyParser = require('body-parser');
 const compression = require('compression');
-var template = require('./lib/template.js');
-var getList = (req, res, next) => {
+let template = require('./lib/template.js');
+let getList = (req, res, next) => {
   fs.readdir('./data', (error, flist) => {
     req.list = flist;
     next();
@@ -21,10 +21,10 @@ app.use(compression());
 app.get('*', getList);
 
 app.get('/', (req, res) => {
-  var title = 'Welcome';
-  var context = 'Hello, Node.js';
-  var list = template.list(req.list);
-  var html = template.html(
+  let title = 'Welcome';
+  let context = 'Hello, Node.js';
+  let list = template.list(req.list);
+  let html = template.html(
     title,
     list,
     `<h2>${title}</h2><p>${context}</p><img src="/images/coding.jpg" style="width:500px; margin:10px">`,
@@ -34,15 +34,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/page/:pageId', (req, res, next) => {
-  var filteredId = path.parse(req.params.pageId).base;
+  let filteredId = path.parse(req.params.pageId).base;
   fs.readFile(`data/${filteredId}`, 'utf8', (err, context) => {
     if (err) {
       next(err);
     } else {
-      var list = template.list(req.list);
-      var title = req.params.pageId;
-      var sanitizedTitle = sanitizeHtml(title);
-      var sanitizedContext = sanitizeHtml(context, {
+      let list = template.list(req.list);
+      let title = req.params.pageId;
+      let sanitizedTitle = sanitizeHtml(title);
+      let sanitizedContext = sanitizeHtml(context, {
         allowedTags: [
           'h1',
           'h2',
@@ -61,7 +61,7 @@ app.get('/page/:pageId', (req, res, next) => {
           'blockquote',
         ],
       });
-      var html = template.html(
+      let html = template.html(
         title,
         list,
         `<h2>${sanitizedTitle}</h2> <p>${sanitizedContext}</p>`,
@@ -78,9 +78,9 @@ app.get('/page/:pageId', (req, res, next) => {
 });
 
 app.get('/create', (req, res) => {
-  var title = 'WEB - create';
-  var list = template.list(req.list);
-  var html = template.html(
+  let title = 'WEB - create';
+  let list = template.list(req.list);
+  let html = template.html(
     title,
     list,
     `
@@ -103,9 +103,9 @@ app.get('/create', (req, res) => {
 
 // create process
 app.post('/create_process', (req, res) => {
-  var post = req.body;
-  var title = post.title;
-  var description = post.description;
+  let post = req.body;
+  let title = post.title;
+  let description = post.description;
   fs.writeFile(`data/${title}`, description, function (err) {
     if (err) {
       console.log(err);
@@ -118,11 +118,11 @@ app.post('/create_process', (req, res) => {
 
 //update
 app.get('/update/:pageId', (req, res) => {
-  var title = req.params.pageId;
-  var list = template.list(req.list);
-  var filteredId = path.parse(req.params.pageId).base;
+  let title = req.params.pageId;
+  let list = template.list(req.list);
+  let filteredId = path.parse(req.params.pageId).base;
   fs.readFile(`data/${filteredId}`, 'utf8', (err, context) => {
-    var html = template.html(
+    let html = template.html(
       title,
       list,
       `
@@ -147,10 +147,10 @@ app.get('/update/:pageId', (req, res) => {
 
 // create process
 app.post('/update_process', (req, res) => {
-  var post = req.body;
-  var id = post.id;
-  var title = post.title;
-  var description = post.description;
+  let post = req.body;
+  let id = post.id;
+  let title = post.title;
+  let description = post.description;
   fs.rename(`data/${id}`, `data/${title}`, function (error) {
     fs.writeFile(`data/${title}`, description, function (err) {
       res.redirect(`/page/${title}`);
@@ -159,9 +159,9 @@ app.post('/update_process', (req, res) => {
 });
 
 app.post('/delete_process', (req, res) => {
-  var post = req.body;
-  var id = post.id;
-  var filteredId = path.parse(id).base;
+  let post = req.body;
+  let id = post.id;
+  let filteredId = path.parse(id).base;
   fs.unlink(`data/${filteredId}`, function (error) {
     res.redirect('/');
   });
