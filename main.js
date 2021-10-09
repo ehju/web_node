@@ -16,12 +16,9 @@ var getList = (req, res, next) => {
 };
 
 app.use(express.static('public'));
-
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(compression());
-
-app.get('*',getList);
+app.get('*', getList);
 
 app.get('/', (req, res) => {
   var title = 'Welcome';
@@ -36,43 +33,47 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
-app.get('/page/:pageId', (req, res) => {
+app.get('/page/:pageId', (req, res, next) => {
   var filteredId = path.parse(req.params.pageId).base;
   fs.readFile(`data/${filteredId}`, 'utf8', (err, context) => {
-    var list = template.list(req.list);
-    var title = req.params.pageId;
-    var sanitizedTitle = sanitizeHtml(title);
-    var sanitizedContext = sanitizeHtml(context, {
-      allowedTags: [
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'p',
-        'strong',
-        'em',
-        'br',
-        'li',
-        'ol',
-        'ul',
-        'span',
-        'blockquote',
-      ],
-    });
-    var html = template.html(
-      title,
-      list,
-      `<h2>${sanitizedTitle}</h2> <p>${sanitizedContext}</p>`,
-      `<button><a href="/create">new post</a></button>
+    if (err) {
+      next(err);
+    } else {
+      var list = template.list(req.list);
+      var title = req.params.pageId;
+      var sanitizedTitle = sanitizeHtml(title);
+      var sanitizedContext = sanitizeHtml(context, {
+        allowedTags: [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6',
+          'p',
+          'strong',
+          'em',
+          'br',
+          'li',
+          'ol',
+          'ul',
+          'span',
+          'blockquote',
+        ],
+      });
+      var html = template.html(
+        title,
+        list,
+        `<h2>${sanitizedTitle}</h2> <p>${sanitizedContext}</p>`,
+        `<button><a href="/create">new post</a></button>
                  <button><a href="/update/${title}">update</a></button>
                  <form action="/delete_process" method="post" style="display:inline;">
                      <input type="hidden" name="id" value="${title}">
                      <input type="submit" value="delete">
                  </form>`
-    );
-    res.send(html);
+      );
+      res.send(html);
+    }
   });
 });
 
@@ -164,6 +165,14 @@ app.post('/delete_process', (req, res) => {
   fs.unlink(`data/${filteredId}`, function (error) {
     res.redirect('/');
   });
+});
+app.use((req, res, next) => {
+  res.status(404).send("Sorry. Can't find that page");
+});
+
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
