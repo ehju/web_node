@@ -7,6 +7,7 @@ const path = require('path');
 const sanitizeHtml = require('sanitize-html');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const helmet = require('helmet');
 let template = require('./lib/template.js');
 let manageRouter = require('./routes/manage');
 
@@ -18,6 +19,10 @@ let getList = (req, res, next) => {
   });
 };
 
+
+
+app.disable('x-powered-by');
+app.use(helmet());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
