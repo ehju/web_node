@@ -13,6 +13,10 @@
 ### 정보
 project link : **https://nodenew-urgxs.run.goorm.io/** ( alive only when developing )
 
+
+### DEMO (10/28 )
+<img src="https://user-images.githubusercontent.com/13077196/139107865-02e60ba3-bc2a-4ce4-9f18-e235fedf01d1.gif">
+
 ##### timeline
 
 - 2021.10.02 node.js CRUD
