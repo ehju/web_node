@@ -101,7 +101,7 @@ app.get('/page/:pageId', (req, res, next) => {
       let html = template.html(
         title,
         list,
-        `<h2>${sanitizedTitle}</h2><h5>${topic[0].created}</h5> <h5>by ${topic[0].name}</h5>  <p>${sanitizedContext}</p>`,
+        `<h2>${sanitizedTitle}</h2><h5>${topic[0].created} &nbsp by ${topic[0].name}</h5>  <p>${sanitizedContext}</p>`,
         `<button><a href="/manage/create">new post</a></button>
                  <button><a href="/manage/update/${filteredId}">update</a></button>
                  <form action="/manage/delete_process" method="post" style="display:inline;">

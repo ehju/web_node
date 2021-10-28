@@ -1,23 +1,57 @@
-
-header {
+.header {
   text-align: center;
+  padding: 15px;
+  font-size: 30px;
+  background: white;
 }
-
-nav {
-  height: 100%;
-  width: 160px;
-  position: fixed;
-  overflow: hidden;
+.footer {
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+  /*background: #ddd;*/
+  margin-top: 10px;
+}
+html {
+  height:100%;
+}
+body {
+  font-family: Arial;
+  padding: 20px;
+  background: #f1f1f1;
+  height: 100%;
+}
+.nav {
+  float: left;
+  width: 25%;
+  font-size: 20px;
+  background-color: white;
+  margin-top: 20px;
+  height :100%;
+}
+.list {
+  padding:15px;
+  margin-left:10px;
 }
 .mycontrol {
   background-color: yellowgreen;
 }
 .container {
-  margin-left : 160px;
+  float: right;
+  width : 75%;
+  margin-top: 20px;
+  height :100%;  
+}
+.blog {  
+  margin-left :10px;
+  background-color: white;
+  padding: 15px;
+}
+.row{
   height: 100%;
 }
-.blog {
-  padding-left: 10px;
+.row:after{
+  display: table;
+  clear:both;
 }
 a {
   text-decoration: none;
