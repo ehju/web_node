@@ -11,14 +11,28 @@ const helmet = require('helmet');
 let template = require('./lib/template.js');
 let manageRouter = require('./routes/manage');
 
+const mysql = require('mysql');
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'nodejs',
+  password: 'jspass',
+  database: 'opentutorials',
+});
+db.connect();
 
+
+//let getList = (req, res, next) => {
+//  fs.readdir('./data', (error, flist) => {
+//    req.list = flist;
+//    next();
+//  });
+//};
 let getList = (req, res, next) => {
-  fs.readdir('./data', (error, flist) => {
-    req.list = flist;
+  db.query(`SELECT * FROM topic`, function (error, topics) {
+    req.list = topics;
     next();
   });
 };
-
 
 
 app.disable('x-powered-by');
@@ -46,14 +60,19 @@ app.get('/', (req, res) => {
   
 app.get('/page/:pageId', (req, res, next) => {
   let filteredId = path.parse(req.params.pageId).base;
-  fs.readFile(`data/${filteredId}`, 'utf8', (err, context) => {
-    if (err) {
-      next(err);
-    } else {
+  db.query(`SELECT * FROM topic`,function(error,topics){
+    if(error){
+      throw error;
+    }
+    db.query(`SELECT * FROM topic WHERE id=?`, [filteredId],function(error2,topic){
+      if(error2){
+        throw error2;
+      }
+      console.log(topic);
       let list = template.list(req.list);
-      let title = req.params.pageId;
+      let title = topic[0].title;
       let sanitizedTitle = sanitizeHtml(title);
-      let sanitizedContext = sanitizeHtml(context, {
+      let sanitizedContext = sanitizeHtml(topic[0].description, {
         allowedTags: [
           'h1',
           'h2',
@@ -84,7 +103,7 @@ app.get('/page/:pageId', (req, res, next) => {
                  </form>`
       );
       res.send(html);
-    }
+    });
   });
 });
 
