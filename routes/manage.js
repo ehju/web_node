@@ -42,9 +42,6 @@ router.post('/create_process', (req, res) => {
   let post = req.body;
   let title = post.title;
   let description = post.description;
-  //fs.writeFile(`data/${title}`, description, 'utf8',(err) => {
-  //  res.redirect(`/page/${title}`);
-  //});
   db.query(`INSERT INTO topic (title, description, created, author_id) VALUES(?, ?, NOW(), ?)`,
     [title, description,1],
     function(error, result){
@@ -53,24 +50,24 @@ router.post('/create_process', (req, res) => {
       }
       res.redirect(`/pages/${result.insertId}`);
     }
-          
   );
 });
 
 //update
 router.get('/update/:pageId', (req, res) => {
-  let title = req.params.pageId;
+  //let title = req.params.pageId;
   let list = template.list(req.list);
   let filteredId = path.parse(req.params.pageId).base;
-  fs.readFile(`data/${filteredId}`, 'utf8', (err, context) => {
+  db.query(`SELECT * FROM topic WHERE id=?`, [filteredId],function(err,topic){
+    console.log(topic);
     let html = template.html(
-      title,
+      topic.title,
       list,
       `
             <form action="/manage/update_process" method="post">
-            <input type ="hidden" name="id" value=${title}>
-            <p><input type ="text" name="title" value=${title}></p>
-            <textarea id="editor" name="description" >${context}</textarea>        
+            <input type ="hidden" name="id" value=${topic[0].id}>
+            <p><input type ="text" name="title" value=${topic[0].title}></p>
+            <textarea id="editor" name="description" >${topic[0].description}</textarea>        
             <p><input type="submit"> </p>
         </form>
         <script>
@@ -86,17 +83,21 @@ router.get('/update/:pageId', (req, res) => {
   });
 });
 
-// create process
+// update process
 router.post('/update_process', (req, res) => {
   let post = req.body;
   let id = post.id;
   let title = post.title;
   let description = post.description;
-  fs.rename(`data/${id}`, `data/${title}`, (error) => {
-    fs.writeFile(`data/${title}`, description,'utf8', (err) => {
-      res.redirect(`/page/${title}`);
-    });
-  });
+  db.query(`UPDATE topic SET title=?, description=? WHERE id=?`,
+    [title, description,id],
+    function(error, result){
+      if(error){
+        throw error;
+      }
+      res.redirect(`/page/${id}`);
+    }
+  );
 });
 
 router.post('/delete_process', (req, res) => {
