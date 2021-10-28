@@ -4,7 +4,14 @@ const fs = require('fs');
 const sanitizeHtml = require('sanitize-html');
 const path = require('path');
 let template = require('../lib/template.js');
-
+const mysql = require('mysql');
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'nodejs',
+  password: 'jspass',
+  database: 'opentutorials',
+});
+db.connect();
 
 router.get('/create', (req, res) => {
   let title = 'WEB - create';
@@ -35,9 +42,19 @@ router.post('/create_process', (req, res) => {
   let post = req.body;
   let title = post.title;
   let description = post.description;
-  fs.writeFile(`data/${title}`, description, 'utf8',(err) => {
-    res.redirect(`/page/${title}`);
-  });
+  //fs.writeFile(`data/${title}`, description, 'utf8',(err) => {
+  //  res.redirect(`/page/${title}`);
+  //});
+  db.query(`INSERT INTO topic (title, description, created, author_id) VALUES(?, ?, NOW(), ?)`,
+    [title, description,1],
+    function(error, result){
+      if(error){
+        throw error;
+      }
+      res.redirect(`/pages/${result.insertId}`);
+    }
+          
+  );
 });
 
 //update
