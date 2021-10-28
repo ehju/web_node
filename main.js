@@ -64,7 +64,7 @@ app.get('/page/:pageId', (req, res, next) => {
     if(error){
       throw error;
     }
-    db.query(`SELECT * FROM topic WHERE id=?`, [filteredId],function(error2,topic){
+    db.query(`SELECT * FROM topic LEFT JOIN author ON topic.author_id=author.id WHERE topic.id=?`, [filteredId],function(error2,topic){
       if(error2){
         throw error2;
       }
@@ -94,7 +94,7 @@ app.get('/page/:pageId', (req, res, next) => {
       let html = template.html(
         title,
         list,
-        `<h2>${sanitizedTitle}</h2> <p>${sanitizedContext}</p>`,
+        `<h2>${sanitizedTitle}</h2> <p>created on ${topic[0].created}</p> <p>by ${topic[0].name}</p>  <p>${sanitizedContext}</p>`,
         `<button><a href="/manage/create">new post</a></button>
                  <button><a href="/manage/update/${filteredId}">update</a></button>
                  <form action="/manage/delete_process" method="post" style="display:inline;">
