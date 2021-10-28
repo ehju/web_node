@@ -98,7 +98,7 @@ app.get('/page/:pageId', (req, res, next) => {
         `<button><a href="/manage/create">new post</a></button>
                  <button><a href="/manage/update/${filteredId}">update</a></button>
                  <form action="/manage/delete_process" method="post" style="display:inline;">
-                     <input type="hidden" name="id" value="${title}">
+                     <input type="hidden" name="id" value="${filteredId}">
                      <input type="submit" value="delete">
                  </form>`
       );

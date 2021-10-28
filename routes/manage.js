@@ -48,7 +48,7 @@ router.post('/create_process', (req, res) => {
       if(error){
         throw error;
       }
-      res.redirect(`/pages/${result.insertId}`);
+      res.redirect(`/page/${result.insertId}`);
     }
   );
 });
@@ -104,9 +104,13 @@ router.post('/delete_process', (req, res) => {
   let post = req.body;
   let id = post.id;
   let filteredId = path.parse(id).base;
-  fs.unlink(`data/${filteredId}`, (error) => {
+  db.query(`DELETE FROM topic WHERE id = ?`, [id], function(error,result){
+    if(error){
+      throw error;
+    }
     res.redirect('/');
   });
+
 });
 
 module.exports = router;
