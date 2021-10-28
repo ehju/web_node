@@ -10,13 +10,13 @@ const compression = require('compression');
 const helmet = require('helmet');
 let template = require('./lib/template.js');
 let manageRouter = require('./routes/manage');
-
 const mysql = require('mysql');
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'nodejs',
   password: 'jspass',
   database: 'opentutorials',
+  dateStrings : 'date'
 });
 db.connect();
 
@@ -68,9 +68,16 @@ app.get('/page/:pageId', (req, res, next) => {
       if(error2){
         throw error2;
       }
-      console.log(topic);
       let list = template.list(req.list);
       let title = topic[0].title;
+      let dateStr=topic[0].created;
+      let a=dateStr.split(" ");
+      let d=a[0].split("-");
+      let t=a[1].split(":");
+      
+      //let t=a[1].split(":");
+      //let formatedDate = new Date(d[0],(d[1]-1),d[2],t[0],t[1],t[2]);
+      //let dateFormat = `${date.getDate()}`
       let sanitizedTitle = sanitizeHtml(title);
       let sanitizedContext = sanitizeHtml(topic[0].description, {
         allowedTags: [
@@ -94,7 +101,7 @@ app.get('/page/:pageId', (req, res, next) => {
       let html = template.html(
         title,
         list,
-        `<h2>${sanitizedTitle}</h2> <p>created on ${topic[0].created}</p> <p>by ${topic[0].name}</p>  <p>${sanitizedContext}</p>`,
+        `<h2>${sanitizedTitle}</h2><h5>${topic[0].created}</h5> <h5>by ${topic[0].name}</h5>  <p>${sanitizedContext}</p>`,
         `<button><a href="/manage/create">new post</a></button>
                  <button><a href="/manage/update/${filteredId}">update</a></button>
                  <form action="/manage/delete_process" method="post" style="display:inline;">
