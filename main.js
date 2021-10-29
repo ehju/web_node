@@ -10,30 +10,14 @@ const compression = require('compression');
 const helmet = require('helmet');
 let template = require('./lib/template.js');
 let manageRouter = require('./routes/manage');
-const mysql = require('mysql');
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'nodejs',
-  password: 'jspass',
-  database: 'opentutorials',
-  dateStrings : 'date'
-});
-db.connect();
+let db = require('./lib/db.js');
 
-
-//let getList = (req, res, next) => {
-//  fs.readdir('./data', (error, flist) => {
-//    req.list = flist;
-//    next();
-//  });
-//};
 let getList = (req, res, next) => {
   db.query(`SELECT * FROM topic`, function (error, topics) {
     req.list = topics;
     next();
   });
 };
-
 
 app.disable('x-powered-by');
 app.use(helmet());

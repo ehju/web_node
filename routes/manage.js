@@ -4,14 +4,7 @@ const fs = require('fs');
 const sanitizeHtml = require('sanitize-html');
 const path = require('path');
 let template = require('../lib/template.js');
-const mysql = require('mysql');
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'nodejs',
-  password: 'jspass',
-  database: 'opentutorials',
-});
-db.connect();
+let db = require('../lib/db.js');
 
 router.get('/create', (req, res) => {
   let title = 'WEB - create';
