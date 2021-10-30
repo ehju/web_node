@@ -11,6 +11,7 @@ const helmet = require('helmet');
 let template = require('./lib/template.js');
 let manageRouter = require('./routes/manage');
 let db = require('./lib/db.js');
+const session = require('express-session')
 
 let getList = (req, res, next) => {
   db.query(`SELECT * FROM topic`, function (error, topics) {
