@@ -2,3 +2,4 @@ node_modules
 goorm.manifest
 nodejs/mysql.js
 lib/db.js
+lib/auth.js

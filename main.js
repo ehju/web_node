@@ -10,6 +10,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 let template = require('./lib/template.js');
 let manageRouter = require('./routes/manage');
+let authRouter = require('./routes/auth');
 let db = require('./lib/db.js');
 const session = require('express-session')
 
@@ -29,7 +30,8 @@ app.use(compression());
 app.get('*', getList);
 
 app.use('/manage', manageRouter);
- 
+app.use('/auth', authRouter);
+
 app.get('/', (req, res) => {
   let title = 'Welcome';
   let context = 'Hello, Node.js';

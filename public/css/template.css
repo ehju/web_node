@@ -60,3 +60,14 @@ a {
 .btn-style {
   border: none;
 }
+.input-text {
+    display: inline-block;
+    width: 50%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+    text-align: left;
+    outline: 0;
+    -webkit-appearance: none;
+}
