@@ -27,6 +27,7 @@ app.use(function (req, res, next) {
 })
 
 app.get('/foo', function (req, res, next) {
+  console.log(req.session);
   res.send('you viewed this page ' + req.session.views['/foo'] + ' times')
 })
 
