@@ -3,3 +3,5 @@ goorm.manifest
 nodejs/mysql.js
 lib/db.js
 lib/auth.js
+lib/session.js
+session

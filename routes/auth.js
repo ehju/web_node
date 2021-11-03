@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 let template = require('../lib/template.js');
 let db = require('../lib/db.js');
+let authData = require('../lib/auth.js');
+let session = require('../lib/session.js');
 
 router.get('/login', (req, res) => {
   let title = 'WEB - create';
@@ -24,8 +26,16 @@ router.get('/login', (req, res) => {
 
 router.post('/login_process', (req, res) => {
   let post = req.body;
-  let username = post.userId;
-  res.send(`Welcome! ${username}`);
+  let id = post.userId;
+  let password = post.userpswd;
+  
+  if (id=== authData.id && password === authData.password){
+    res.send(`Welcome! ${authData.nickname}`);
+  }
+  else{
+    res.send("wrong");
+  }
+  
   //res.redirect(`/`);
 });
 
