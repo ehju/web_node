@@ -5,7 +5,7 @@ const path = require('path');
 let template = require('../lib/template.js');
 let db = require('../lib/db.js');
 let authData = require('../lib/auth.js');
-let session = require('../lib/session.js');
+
 
 router.get('/login', (req, res) => {
   let title = 'WEB - create';
@@ -30,10 +30,12 @@ router.post('/login_process', (req, res) => {
   let password = post.userpswd;
   
   if (id=== authData.id && password === authData.password){
-    res.send(`Welcome! ${authData.nickname}`);
+    req.session.is_logined = true;
+    req.session.nickname = authData.nickname;
+    res.redirect(`/`);
   }
   else{
-    res.send("wrong");
+    res.send('Wrong ID or Password');
   }
   
   //res.redirect(`/`);

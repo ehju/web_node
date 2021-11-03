@@ -12,7 +12,9 @@ let template = require('./lib/template.js');
 let manageRouter = require('./routes/manage');
 let authRouter = require('./routes/auth');
 let db = require('./lib/db.js');
-const session = require('express-session')
+let sessInfo = require('./lib/session.js');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 let getList = (req, res, next) => {
   db.query(`SELECT * FROM topic`, function (error, topics) {
@@ -26,7 +28,12 @@ app.use(helmet());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
-
+app.use(session({
+  secret: sessInfo.secret, //required option 서버에 안올라가야함.
+  resave: sessInfo.resave,   // session data가 바뀌기 전까지 저장소에 저장하지않음 true :session이 바뀌건 말건 저장소에 저장
+  saveUninitialized: sessInfo.saveUninitialized, // session 이 필요하기 전까지는 session을 구동하지않음 
+  store : new FileStore()
+}));
 app.get('*', getList);
 
 app.use('/manage', manageRouter);
