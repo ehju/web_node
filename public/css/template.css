@@ -32,6 +32,12 @@ body {
   padding:15px;
   margin-left:10px;
 }
+.user_info {
+  padding:15px;
+  margin-left:10px;
+  text-align:center;
+}
+
 .mycontrol {
   background-color: yellowgreen;
 }
@@ -58,7 +64,21 @@ a {
   color: black;
 }
 .btn-style {
+  background-color: #4CAF50;
   border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+
+}
+.home-btn-style {
+  padding: 10px 30px;
+  font-size: 15px;
+}
+.post-btn-style {
+  padding: 10px 15px;
+  font-size: 15px;
 }
 .input-text {
     display: inline-block;

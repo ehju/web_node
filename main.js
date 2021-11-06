@@ -104,11 +104,11 @@ app.get('/page/:pageId', (req, res, next) => {
         title,
         list,
         `<h2>${sanitizedTitle}</h2><h5>${topic[0].created} &nbsp by ${topic[0].name}</h5>  <p>${sanitizedContext}</p>`,
-        `<button><a href="/manage/create">new post</a></button>
-                 <button><a href="/manage/update/${filteredId}">update</a></button>
+        `<a class="btn-style post-btn-style" href="/manage/create">new post</a>
+                 <a class="btn-style post-btn-style" href="/manage/update/${filteredId}">update</a>
                  <form action="/manage/delete_process" method="post" style="display:inline;">
                      <input type="hidden" name="id" value="${filteredId}">
-                     <input type="submit" value="delete">
+                     <input class="btn-style post-btn-style" type="submit" value="delete">
                  </form>`
       );
       res.send(html);
