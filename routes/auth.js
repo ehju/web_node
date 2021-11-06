@@ -37,8 +37,11 @@ router.post('/login_process', (req, res) => {
   else{
     res.send('Wrong ID or Password');
   }
-  
-  //res.redirect(`/`);
 });
 
+router.get('/logout', (req, res) => {
+  req.session.destroy(function(err){
+    res.redirect('/');
+  });
+});
 module.exports = router;

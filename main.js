@@ -22,6 +22,13 @@ let getList = (req, res, next) => {
     next();
   });
 };
+const authIsOwner = (req,res) => {
+  if(req.session.is_logined){
+    return true;
+  }else{
+    return false;
+  }
+}
 let cspOptions = {
     useDefaults: true,
     directives: {
@@ -48,6 +55,10 @@ app.use('/manage', manageRouter);
 app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
+  let authStatusUI = '<a class="btn-style home-btn-style" href="/auth/login">login</a>'
+  if(authIsOwner(req,res)){
+    authStatusUI = `<span>${req.session.nickname}</span><a class="btn-style home-btn-style" href="/auth/logout">logout</a>`;
+  }
   let title = 'Welcome';
   let context = 'Hello, Node.js';
   let list = template.list(req.list);
@@ -55,7 +66,8 @@ app.get('/', (req, res) => {
     title,
     list,
     `<h2>${title}</h2><p>${context}</p><img src="/images/coding.jpg" style="width:500px; margin:10px">`,
-    `<a class="btn-style post-btn-style" href="manage/create">new post</a>`
+    `<a class="btn-style post-btn-style" href="manage/create">new post</a>`,
+    authStatusUI
   );
   res.send(html);
 });
@@ -119,7 +131,6 @@ app.get('/page/:pageId', (req, res, next) => {
 app.use((req, res, next) => {
   res.status(404).send("Sorry. Can't find that page");
 });
-
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send('Something broke!');
