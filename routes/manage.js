@@ -5,6 +5,8 @@ const sanitizeHtml = require('sanitize-html');
 const path = require('path');
 let template = require('../lib/template.js');
 let db = require('../lib/db.js');
+let auth = require('../lib/auth');
+
 
 router.get('/create', (req, res) => {
   let title = 'WEB - create';
@@ -25,7 +27,8 @@ router.get('/create', (req, res) => {
             console.error( error );
         } );
     </script>`,
-    `<a class="btn-style post-btn-style" href="/manage/create">new post</a>`
+    `<a class="btn-style post-btn-style" href="/manage/create">new post</a>`,
+    auth.StatusUI(req,res)
   );
   res.send(html);
 });
@@ -70,7 +73,8 @@ router.get('/update/:pageId', (req, res) => {
             console.error( error );
         } );
     </script>`,
-      `<a class="btn-style post-btn-style" href="/manage/create">new post</a>`
+      `<a class="btn-style post-btn-style" href="/manage/create">new post</a>`,
+      auth.StatusUI(req,res)
     );
     res.send(html);
   });

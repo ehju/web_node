@@ -15,6 +15,7 @@ let db = require('./lib/db.js');
 let sessInfo = require('./lib/session.js');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+let auth = require('./lib/auth');
 
 let getList = (req, res, next) => {
   db.query(`SELECT * FROM topic`, function (error, topics) {
@@ -55,10 +56,6 @@ app.use('/manage', manageRouter);
 app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
-  let authStatusUI = '<a class="btn-style home-btn-style" href="/auth/login">login</a>'
-  if(authIsOwner(req,res)){
-    authStatusUI = `<span>${req.session.nickname}</span><a class="btn-style home-btn-style" href="/auth/logout">logout</a>`;
-  }
   let title = 'Welcome';
   let context = 'Hello, Node.js';
   let list = template.list(req.list);
@@ -67,7 +64,7 @@ app.get('/', (req, res) => {
     list,
     `<h2>${title}</h2><p>${context}</p><img src="/images/coding.jpg" style="width:500px; margin:10px">`,
     `<a class="btn-style post-btn-style" href="manage/create">new post</a>`,
-    authStatusUI
+    auth.StatusUI(req,res)
   );
   res.send(html);
 });
@@ -121,7 +118,8 @@ app.get('/page/:pageId', (req, res, next) => {
                  <form action="/manage/delete_process" method="post" style="display:inline;">
                      <input type="hidden" name="id" value="${filteredId}">
                      <input class="btn-style post-btn-style" type="submit" value="delete">
-                 </form>`
+                 </form>`,
+        auth.StatusUI(req,res)
       );
       res.send(html);
     });

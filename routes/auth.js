@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 let template = require('../lib/template.js');
 let db = require('../lib/db.js');
-let authData = require('../lib/auth.js');
-
+let authData = require('../lib/authData');
+let auth = require('../lib/auth');
 
 router.get('/login', (req, res) => {
   let title = 'WEB - create';
