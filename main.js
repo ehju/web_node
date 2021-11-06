@@ -22,9 +22,17 @@ let getList = (req, res, next) => {
     next();
   });
 };
-
+let cspOptions = {
+    useDefaults: true,
+    directives: {
+      "script-src": ["'self'", 'https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js', "'unsafe-inline'"]
+      //"script-src" : [ "'self'", "'sha256-1Xi5yztaMBBRD9kw29rAo7bsHS3yVOyWXhhI/z+QfUA='"]
+    },
+  }
 app.disable('x-powered-by');
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: cspOptions
+}));
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
