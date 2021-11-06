@@ -25,7 +25,7 @@ router.get('/create', (req, res) => {
             console.error( error );
         } );
     </script>`,
-    `<button><a href="/manage/create">new post</a></button>`
+    `<a class="btn-style post-btn-style" href="/manage/create">new post</a>`
   );
   res.send(html);
 });
@@ -70,7 +70,7 @@ router.get('/update/:pageId', (req, res) => {
             console.error( error );
         } );
     </script>`,
-      `<button><a href="/manage/create">new post</a></button>`
+      `<a class="btn-style post-btn-style" href="/manage/create">new post</a>`
     );
     res.send(html);
   });

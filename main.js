@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
     title,
     list,
     `<h2>${title}</h2><p>${context}</p><img src="/images/coding.jpg" style="width:500px; margin:10px">`,
-    `<button><a href="manage/create">new post</a></button>`
+    `<a class="btn-style post-btn-style" href="manage/create">new post</a>`
   );
   res.send(html);
 });
