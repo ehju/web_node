@@ -19,8 +19,6 @@ project link : **https://nodenew-urgxs.run.goorm.io/** ( alive only when develop
 - 2021.10.02 node.js CRUD
 - 2021.10.07 express 도입
 - 2021.10.28 mysql 도입
-- 2021.10.31 ~ 인증/ 로그인 구현중 
-  
  
 
 ### Reference
